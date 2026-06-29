@@ -419,8 +419,45 @@ textarea{resize:vertical;min-height:55px}
   </div>
   <div class="section s3">
     <div class="sec-title c3">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      B · Tareas Cotidianas
+    </div>
+    <div class="field">
+      <label class="lbl">Tareas con mayor frecuencia <span style="font-weight:400;color:#94a3b8">(puede elegir todas las que apliquen)</span></label>
+      <div class="opts" id="a_tareas">
+        <label class="opt"><input type="checkbox" value="Agenda y citas">Agenda y citas</label>
+        <label class="opt"><input type="checkbox" value="Facturación / CFDI">Facturación / CFDI</label>
+        <label class="opt"><input type="checkbox" value="Cobranza">Cobranza</label>
+        <label class="opt"><input type="checkbox" value="Atención telefónica">Atención telefónica</label>
+        <label class="opt"><input type="checkbox" value="Archivo y expedientes">Archivo y expedientes</label>
+        <label class="opt"><input type="checkbox" value="Conciliación de pagos">Conciliación de pagos</label>
+        <label class="opt"><input type="checkbox" value="Compras / Proveedores">Compras / Proveedores</label>
+        <label class="opt"><input type="checkbox" value="Reportes y KPIs">Reportes y KPIs</label>
+      </div>
+    </div>
+    <div class="field">
+      <label class="lbl">Horas al día dedicadas a tareas repetitivas</label>
+      <div class="opts" id="a_horas">
+        <label class="opt"><input type="radio" name="a_horas" value="1">Menos de 1h</label>
+        <label class="opt"><input type="radio" name="a_horas" value="2">1–2h</label>
+        <label class="opt"><input type="radio" name="a_horas" value="3">2–4h</label>
+        <label class="opt"><input type="radio" name="a_horas" value="4">Más de 4h</label>
+      </div>
+    </div>
+    <div class="field">
+      <label class="lbl">¿Usa plantillas o formatos estandarizados?</label>
+      <div class="opts" id="a_temp">
+        <label class="opt"><input type="radio" name="a_temp" value="3">Sí, siempre</label>
+        <label class="opt"><input type="radio" name="a_temp" value="2">A veces</label>
+        <label class="opt"><input type="radio" name="a_temp" value="1">Rara vez</label>
+        <label class="opt"><input type="radio" name="a_temp" value="0">No, desde cero</label>
+      </div>
+    </div>
+  </div>
+  <div class="section s3">
+    <div class="sec-title c3">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-      B · Infraestructura y Sistemas
+      C · Infraestructura y Sistemas
     </div>
     <div class="field">
       <label class="lbl">Sistemas administrativos actuales</label>
@@ -454,7 +491,7 @@ textarea{resize:vertical;min-height:55px}
   <div class="section s3">
     <div class="sec-title c3">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-      C · Costos y Recursos
+      D · Costos y Recursos
     </div>
     <div class="two">
       <div class="field"><label class="lbl">Número de colaboradores</label><input type="number" id="a_personas" placeholder="0" min="1"></div>
@@ -477,7 +514,7 @@ textarea{resize:vertical;min-height:55px}
   <div class="section s3">
     <div class="sec-title c3">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-      D · Prioridades IA
+      E · Prioridades IA
     </div>
     <div class="field">
       <label class="lbl">¿Qué procesos automatizaría? <span style="font-weight:400;color:#94a3b8">(puede elegir varios)</span></label>
@@ -653,6 +690,7 @@ function buildDiagnostico(){
     },
     administrador:{
       nombre:getVal('a_nombre'),rol:getVal('a_rol'),areas:getChecked('a_areas'),
+      tareas:getChecked('a_tareas'),horas:getRadioVal('a_horas'),plantillas:getRadioVal('a_temp'),
       sistemas:getChecked('a_sys'),nube:getVal('a_nube'),backup:getVal('a_backup'),
       expediente:getRadioVal('a_exp'),colaboradores:getVal('a_personas'),
       presupuesto:getVal('a_presup'),costos:getChecked('a_costos'),
@@ -739,6 +777,9 @@ function downloadCSV(){
     ['Carga de trabajo','',state.scaleVals['sc_j'],''],
     ['','','',''],
     ['--- ADMINISTRADOR ---','','',''],
+    ['Tareas frecuentes','','',getChecked('a_tareas').join(', ')],
+    ['Horas tareas repetitivas','','',getRadioVal('a_horas')],
+    ['Usa plantillas','','',getRadioVal('a_temp')],
     ['Sistemas','','',getChecked('a_sys').join(', ')],
     ['Expediente electrónico','','',getRadioVal('a_exp')],
     ['Presupuesto tecnología','','',getVal('a_presup')],
@@ -828,6 +869,9 @@ function downloadPrint(){
 
   ${state.saved[2]?`<h2>Administrador · ${getVal('a_nombre')||'Sin nombre'}</h2>
   <div class="row"><span class="lbl">Rol</span><span class="val">${getVal('a_rol')||'—'}</span></div>
+  <div class="row"><span class="lbl">Tareas frecuentes</span><span class="val">${getChecked('a_tareas').join(', ')||'—'}</span></div>
+  <div class="row"><span class="lbl">Horas tareas repetitivas</span><span class="val">${getRadioVal('a_horas')||'—'}</span></div>
+  <div class="row"><span class="lbl">Usa plantillas</span><span class="val">${getRadioVal('a_temp')||'—'}</span></div>
   <div class="row"><span class="lbl">Sistemas actuales</span><span class="val">${getChecked('a_sys').join(', ')||'—'}</span></div>
   <div class="row"><span class="lbl">Expediente electrónico</span><span class="val">${getRadioVal('a_exp')||'—'}</span></div>
   <div class="row"><span class="lbl">Presupuesto tecnología</span><span class="val">${getVal('a_presup')||'—'}</span></div>
