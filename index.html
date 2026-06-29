@@ -368,6 +368,19 @@ textarea{resize:vertical;min-height:55px}
         <label class="opt"><input type="radio" name="j_cap" value="0">Prefiero no cambiar</label>
       </div>
     </div>
+    <div class="field">
+      <label class="lbl">¿Qué tareas / procesos automatizaría? <span style="font-weight:400;color:#94a3b8">(puede elegir varios)</span></label>
+      <div class="opts" id="j_automatizar">
+        <label class="opt"><input type="checkbox" value="Redacción de actas">Redacción de actas</label>
+        <label class="opt"><input type="checkbox" value="Revisión de contratos">Revisión de contratos</label>
+        <label class="opt"><input type="checkbox" value="Búsqueda de antecedentes">Búsqueda de antecedentes</label>
+        <label class="opt"><input type="checkbox" value="Cotizaciones">Cotizaciones</label>
+        <label class="opt"><input type="checkbox" value="Gestión de expedientes">Gestión de expedientes</label>
+        <label class="opt"><input type="checkbox" value="Investigación jurídica">Investigación jurídica</label>
+        <label class="opt"><input type="checkbox" value="Seguimiento de trámites">Seguimiento de trámites</label>
+        <label class="opt"><input type="checkbox" value="Atención a clientes">Atención a clientes</label>
+      </div>
+    </div>
     <div class="field"><label class="lbl">¿Qué herramienta le ahorraría más tiempo?</label><textarea id="j_herramienta" placeholder="Ej. un asistente que redacte el acta con los datos del cliente..."></textarea></div>
   </div>
   <button class="btn btn-2" onclick="saveForm(2)">
@@ -467,13 +480,15 @@ textarea{resize:vertical;min-height:55px}
       D · Prioridades IA
     </div>
     <div class="field">
-      <label class="lbl">¿Qué proceso automatizaría primero?</label>
+      <label class="lbl">¿Qué procesos automatizaría? <span style="font-weight:400;color:#94a3b8">(puede elegir varios)</span></label>
       <div class="opts" id="a_prio">
-        <label class="opt"><input type="radio" name="a_prio" value="Agenda">Agenda de citas</label>
-        <label class="opt"><input type="radio" name="a_prio" value="Facturación">Facturación</label>
-        <label class="opt"><input type="radio" name="a_prio" value="Atención">Atención al cliente</label>
-        <label class="opt"><input type="radio" name="a_prio" value="Reportes">Reportes y KPIs</label>
-        <label class="opt"><input type="radio" name="a_prio" value="Cobranza">Cobranza</label>
+        <label class="opt"><input type="checkbox" value="Agenda">Agenda de citas</label>
+        <label class="opt"><input type="checkbox" value="Facturación">Facturación</label>
+        <label class="opt"><input type="checkbox" value="Atención">Atención al cliente</label>
+        <label class="opt"><input type="checkbox" value="Reportes">Reportes y KPIs</label>
+        <label class="opt"><input type="checkbox" value="Cobranza">Cobranza</label>
+        <label class="opt"><input type="checkbox" value="Archivo">Archivo / Expedientes</label>
+        <label class="opt"><input type="checkbox" value="Cobros">Conciliación / Pagos</label>
       </div>
     </div>
     <div class="field">
@@ -633,14 +648,15 @@ function buildDiagnostico(){
       tareas:getChecked('j_tareas'),horas_redaccion:getRadioVal('j_horas'),plantillas:getRadioVal('j_temp'),
       tareas_repetitivas:getVal('j_repetitivas'),errores:getVal('j_errores'),
       carga:state.scaleVals['sc_j'],uso_ia:getRadioVal('j_ia'),
-      disposicion:getRadioVal('j_cap'),herramienta_deseada:getVal('j_herramienta')
+      disposicion:getRadioVal('j_cap'),automatizar:getChecked('j_automatizar'),
+      herramienta_deseada:getVal('j_herramienta')
     },
     administrador:{
       nombre:getVal('a_nombre'),rol:getVal('a_rol'),areas:getChecked('a_areas'),
       sistemas:getChecked('a_sys'),nube:getVal('a_nube'),backup:getVal('a_backup'),
       expediente:getRadioVal('a_exp'),colaboradores:getVal('a_personas'),
       presupuesto:getVal('a_presup'),costos:getChecked('a_costos'),
-      prioridad:getRadioVal('a_prio'),madurez_digital:state.scaleVals['sc_a'],
+      prioridad:getChecked('a_prio'),madurez_digital:state.scaleVals['sc_a'],
       observaciones:getVal('a_obs')
     }
   };
@@ -719,6 +735,7 @@ function downloadCSV(){
     ['Uso de plantillas','',getRadioVal('j_temp'),''],
     ['Uso de IA','',getRadioVal('j_ia'),''],
     ['Disposición capacitación','',getRadioVal('j_cap'),''],
+    ['Tareas/procesos a automatizar','',getChecked('j_automatizar').join(', '),''],
     ['Carga de trabajo','',state.scaleVals['sc_j'],''],
     ['','','',''],
     ['--- ADMINISTRADOR ---','','',''],
@@ -726,7 +743,7 @@ function downloadCSV(){
     ['Expediente electrónico','','',getRadioVal('a_exp')],
     ['Presupuesto tecnología','','',getVal('a_presup')],
     ['Madurez digital','','',state.scaleVals['sc_a']],
-    ['Prioridad automatización','','',getRadioVal('a_prio')],
+    ['Prioridad automatización','','',getChecked('a_prio').join(', ')],
   ];
   const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
   const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
@@ -806,6 +823,7 @@ function downloadPrint(){
   <div class="row"><span class="lbl">Uso de plantillas</span><span class="val">${getRadioVal('j_temp')||'—'}</span></div>
   <div class="row"><span class="lbl">Uso de IA</span><span class="val">${getRadioVal('j_ia')||'—'}</span></div>
   <div class="row"><span class="lbl">Disposición capacitación</span><span class="val">${getRadioVal('j_cap')||'—'}</span></div>
+  <div class="row"><span class="lbl">Tareas/procesos a automatizar</span><span class="val">${getChecked('j_automatizar').join(', ')||'—'}</span></div>
   <div class="row"><span class="lbl">Carga de trabajo (1-5)</span><span class="val">${state.scaleVals['sc_j']||'—'}</span></div>`:''}
 
   ${state.saved[2]?`<h2>Administrador · ${getVal('a_nombre')||'Sin nombre'}</h2>
@@ -814,7 +832,7 @@ function downloadPrint(){
   <div class="row"><span class="lbl">Expediente electrónico</span><span class="val">${getRadioVal('a_exp')||'—'}</span></div>
   <div class="row"><span class="lbl">Presupuesto tecnología</span><span class="val">${getVal('a_presup')||'—'}</span></div>
   <div class="row"><span class="lbl">Madurez digital (1-5)</span><span class="val">${state.scaleVals['sc_a']||'—'}</span></div>
-  <div class="row"><span class="lbl">Prioridad automatización</span><span class="val">${getRadioVal('a_prio')||'—'}</span></div>
+  <div class="row"><span class="lbl">Prioridad automatización</span><span class="val">${getChecked('a_prio').join(', ')||'—'}</span></div>
   <div class="row"><span class="lbl">Observaciones</span><span class="val">${getVal('a_obs')||'—'}</span></div>`:''}
 
   <h2>Mapa de Flujo de Procesos</h2>
