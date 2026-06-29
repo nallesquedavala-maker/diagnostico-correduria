@@ -573,18 +573,18 @@ function selScale(id,el,cls,val){
   state.scaleVals[id]=val;
 }
 
-document.querySelectorAll('.opts').forEach(grp=>{
-  grp.querySelectorAll('.opt').forEach(opt=>{
-    opt.addEventListener('click',()=>{
-      const inp=opt.querySelector('input');
-      const pEl=opt.closest('.panel');
-      const idx=['p1','p2','p3'].indexOf(pEl?pEl.id:'')+1;
-      const cls='ck'+idx;
-      if(inp.type==='radio'){
-        opt.closest('.opts').querySelectorAll('.opt').forEach(o=>o.classList.remove('ck1','ck2','ck3'));
-      }
-      opt.classList.toggle(cls);
-    });
+document.querySelectorAll('.opts .opt input').forEach(inp=>{
+  inp.addEventListener('change',()=>{
+    const opt=inp.closest('.opt');
+    const pEl=opt.closest('.panel');
+    const idx=['p1','p2','p3'].indexOf(pEl?pEl.id:'')+1;
+    const cls='ck'+idx;
+    if(inp.type==='radio'){
+      opt.closest('.opts').querySelectorAll('.opt').forEach(o=>o.classList.remove('ck1','ck2','ck3'));
+      opt.classList.add(cls);
+    }else{
+      opt.classList.toggle(cls,inp.checked);
+    }
   });
 });
 
